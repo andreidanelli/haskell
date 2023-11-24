@@ -11,6 +11,7 @@ import Lexer
     num             { TokenNum $$ }
     '+'             { TokenAdd }
     "-"             { TokenSub }
+    "*"             { TokenMul }
     "&&"            { TokenAnd }
     true            { TokenTrue }
     false           { TokenFalse }
@@ -29,6 +30,7 @@ Exp                 : num                           { Num $1 }
                     | false                         { BFalse }
                     | Exp '+' Exp                   { Add $1 $3 }
                     | Exp "-" Exp                   { Sub $1 $3 }
+                    | Exp "*" Exp                   { Mul $1 $3 }
                     | Exp "&&" Exp                  { And $1 $3 }
                     | if Exp then Exp else Exp      { If $2 $4 $6 }
                     | Exp "||" Exp                  { Or $1 $3 }
