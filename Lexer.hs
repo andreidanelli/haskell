@@ -9,6 +9,7 @@ data Expr =  BTrue
            | And Expr Expr      
            | If Expr Expr Expr 
            | Or Expr Expr
+           | Sub Expr Expr
        deriving Show
 
 data Ty = TBool
@@ -19,6 +20,7 @@ data Token = TokenTrue
            | TokenFalse
            | TokenNum Int
            | TokenAdd
+           | TokenSub           
            | TokenAnd
            | TokenIf
            | TokenThen
@@ -27,13 +29,13 @@ data Token = TokenTrue
         deriving (Show, Eq)
 
 isSymb :: Char -> Bool
-isSymb c = c `elem` "+&|"
+isSymb c = c `elem` "+&|-"
 
 lexer :: String -> [Token]
 lexer [] = []
 lexer (c:cs) | isSpace c = lexer cs     
              | isDigit c = lexNum (c:cs)  
-             | isSymb c = lexSymb (c:cs)  
+             | isSymb  c = lexSymb (c:cs)  
              | isAlpha c = lexKW (c:cs) 
 
 lexNum :: String -> [Token]
@@ -42,7 +44,8 @@ lexNum cs = case span isDigit cs of
 
 lexSymb :: String -> [Token]
 lexSymb cs = case span isSymb cs of
-                ("+", rest) -> TokenAdd  : lexer rest
+                ("+", rest)  -> TokenAdd : lexer rest
+                ("-", rest)  -> TokenSub : lexer rest
                 ("&&", rest) -> TokenAnd : lexer rest
                 ("||", rest) -> TokenOr  : lexer rest
                 _-> error "Lexial error: Invalid Symbol!"
