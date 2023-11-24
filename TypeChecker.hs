@@ -14,7 +14,12 @@ typeof (Add e1 e2) = case (typeof e1, typeof e2) of
 typeof (And e1 e2) = case (typeof e1, typeof e2) of
                         (Just TBool, Just TBool) -> Just TBool
                         _                        -> Nothing
-typeof (IF e1 e2 e3) = case (typeof e1) of
+
+typeof (Or e1 e2) = case (typeof e1, typeof e2) of
+                        (Just TBool, Just TBool) -> Just TBool
+                        _                        -> Nothing
+
+typeof (If e1 e2 e3) = case (typeof e1) of
                         Just TBool -> case (typeof e2, typeof e3) of    
                                         (Just t1, Just t2)          -> if (t1 == t2) then
                                                                         Just t1
@@ -24,5 +29,5 @@ typeof (IF e1 e2 e3) = case (typeof e1) of
 
 typecheck :: Expr -> Expr
 typecheck e = case typeof  e of
-            | Just _ -> e
-            | _      -> error "Type error!"
+            Just _ -> e
+            _      -> error "Type error!"

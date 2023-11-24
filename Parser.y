@@ -1,11 +1,11 @@
-{module Parser where
-
+{
+module Parser where
 import Lexer
 }
 
 %name parser
 %tokentype { Token }
-%error { parserError }
+%error { parseError }
 
 %token
     num             { TokenNum $$ }
@@ -16,17 +16,23 @@ import Lexer
     if              { TokenIf }
     then            { TokenThen }
     else            { TokenElse } 
+    "||"            { TokenOr }
+
+%left '+'
 
 %%
 
 Exp                 : num                           { Num $1 }
-                    | true                          { Btrue }
+                    | true                          { BTrue }
                     | false                         { BFalse }
                     | Exp '+' Exp                   { Add $1 $3 }
                     | Exp "&&" Exp                  { And $1 $3 }
                     | if Exp then Exp else Exp      { If $2 $4 $6 }
+                    | Exp "||" Exp                  { Or $1 $3 }
                 
 {
-    parsererror :: [Token] -> a
-    parsererror _ = error "Syntaxe error!"
+
+parseError :: [Token] -> a
+parseError _ = error "Syntaxe error!"
+
 }

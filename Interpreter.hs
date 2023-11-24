@@ -16,9 +16,14 @@ step (Add e1 e2) = Add (step e1) e2
 step (And BFalse _) = BFalse
 step (And BTrue e) = e
 step (And e1 e2) = And (step e1) e2
-step (IF BFalse e1 e2) = e2
-step (IF BTrue e1 e2) = e1
-step (IF e e1 e2) = IF (step e) e1 e2
+step (Or BTrue _) = BTrue
+step (Or _ BTrue) = BTrue
+step (Or BFalse e) = e
+step (Or e BFalse) = e
+step (Or e1 e2) = Or (step e1) e2 
+step (If BFalse e1 e2) = e2
+step (If BTrue e1 e2) = e1
+step (If e e1 e2) = If (step e) e1 e2
 step e = e
 
 eval :: Expr -> Expr

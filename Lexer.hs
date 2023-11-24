@@ -7,7 +7,8 @@ data Expr =  BTrue
            | Num Int            
            | Add Expr Expr
            | And Expr Expr      
-           | IF Expr Expr Expr 
+           | If Expr Expr Expr 
+           | Or Expr Expr
        deriving Show
 
 data Ty = TBool
@@ -22,10 +23,11 @@ data Token = TokenTrue
            | TokenIf
            | TokenThen
            | TokenElse
+           | TokenOr
         deriving (Show, Eq)
 
 isSymb :: Char -> Bool
-isSymb c = c `elem` "+&"
+isSymb c = c `elem` "+&|"
 
 lexer :: String -> [Token]
 lexer [] = []
@@ -40,8 +42,9 @@ lexNum cs = case span isDigit cs of
 
 lexSymb :: String -> [Token]
 lexSymb cs = case span isSymb cs of
-                ("+", rest) -> TokenAdd : lexer rest
+                ("+", rest) -> TokenAdd  : lexer rest
                 ("&&", rest) -> TokenAnd : lexer rest
+                ("||", rest) -> TokenOr  : lexer rest
                 _-> error "Lexial error: Invalid Symbol!"
 
 lexKW :: String -> [Token]
