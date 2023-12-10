@@ -1,4 +1,8 @@
+<h1 align="center">Interpretador do Lambda Cálculo</h1>
+
 ![Minion](https://upload.wikimedia.org/wikipedia/commons/2/2f/Logo_of_the_Haskell_programming_language.png)
+
+<h4>Trabalho desenvolvido em sala de aula, na disciplina de Linguagens de Programação (LP), ministradas pelo professor Dr. Samuel da Silva Feitosa.</h4>
 
 # Instalação
 
@@ -17,7 +21,7 @@
   - Instala todas as dependências automaticamente (incluindo o compilador GHC).
   - https://www.haskellstack.org/
 
-# Logo abaixo, estão alguns comandos para rodar o interpretador desenvolvido em Haskell corretamente.
+## Logo abaixo, estão alguns comandos para rodar o interpretador desenvolvido em Haskell corretamente.
 
 ### Comando que faz gerar o arquivo Parser.hs para que então a aplicação funcione corretamente.
 
@@ -44,7 +48,3 @@ Observação: Lembrando que deve ser substituído o "arquivo.extensão" para o n
 ```
 eval $ parser $ lexer "if true && false then 4 else 5
 ```
-
-::: warning
-_here be dragons_
-:::
