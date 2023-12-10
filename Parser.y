@@ -5,23 +5,33 @@ import Lexer
 
 %name parser
 %tokentype { Token }
-%error { parseError }
-
-%token
-    num             { TokenNum $$ }
-    '+'             { TokenAdd }
-    "-"             { TokenSub }
-    "*"             { TokenMul }
-    "&&"            { TokenAnd }
-    true            { TokenTrue }
-    false           { TokenFalse }
-    if              { TokenIf }
-    then            { TokenThen }
-    else            { TokenElse } 
-    "||"            { TokenOr }
-
+%error { parserError }
 
 %left '+'
+
+%token
+    num         { TokenNum $$ }
+    '+'         { TokenAdd }
+    "-"         { TokenSub }
+    "*"         { TokenMul }
+    "&&"        { TokenAnd }
+    true        { TokenTrue }
+    false       { TokenFalse }
+    if          { TokenIf }
+    then        { TokenThen }
+    else        { TokenElse } 
+    "||"        { TokenOr }
+    var         { TokenVar $$ }
+    '\\'        { TokenLam }
+    "->"        { TokenArrow }
+    '('         { TokenLParen }
+    ')'         { TokenRParen }
+    '='         { TokenEq }
+    let         { TokenLet }
+    in          { TokenIn }
+    Bool        { TokenBoolean }
+    Num         { TokenNumber }
+    ':'         { TokenColon }
 
 %%
 
@@ -34,10 +44,19 @@ Exp                 : num                           { Num $1 }
                     | Exp "&&" Exp                  { And $1 $3 }
                     | if Exp then Exp else Exp      { If $2 $4 $6 }
                     | Exp "||" Exp                  { Or $1 $3 }
-                
+                    | var                           { Var $1 }
+                    | '\\' var ':' Type "->" Exp    { Lam $2 $4 $6 }
+                    | Exp Exp                       { App $1 $2 }
+                    | '(' Exp ')'                   { Paren $2 }
+                    | let var '=' Exp in Exp        { Let $2 $4 $6 }
+
+Type    : Bool                                      { TBool }
+        | Num                                       { TNum }
+        | '(' Type "->" Type ')'                    { TFun $2 $4 }
+
 {
 
-parseError :: [Token] -> a
-parseError _ = error "Syntaxe error!"
+parserError :: [Token] -> a
+parserError _ = error "Syntax error!"
 
 }
