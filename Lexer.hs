@@ -16,6 +16,7 @@ data Expr =  BTrue
            | App  Expr Expr
            | Paren Expr
            | Let String Expr Expr 
+           | Bigger Expr Expr
        deriving Show
 
 data Ty = TBool
@@ -45,6 +46,7 @@ data Token = TokenTrue
            | TokenColon
            | TokenBoolean
            | TokenNumber
+           | TokenBigger
         deriving (Show, Eq)
 
 isSymb :: Char -> Bool
@@ -74,6 +76,7 @@ lexSymbol cs = case span isSymb cs of
                 ("->", rest) -> TokenArrow : lexer rest 
                 ("=", rest)  -> TokenEq : lexer rest 
                 (":", rest)  -> TokenColon : lexer rest 
+                (">", rest)  -> TokenBigger : lexer rest
                 _-> error "Lexial error: Invalid Symbol!"
 
 lexKW :: String -> [Token]

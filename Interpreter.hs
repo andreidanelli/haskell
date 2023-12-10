@@ -22,6 +22,7 @@ subst x n (And e1 e2) = And (subst x n e1) (subst x n e2)
 subst x n (If e1 e2 e3) = If (subst x n e1) (subst x n e2) (subst x n e3)
 subst x n (Paren e) = Paren (subst x n e)
 subst x n (Let v e1 e2) = Let v (subst x n e1) (subst x n e2)
+subst x n (Bigger e1 e2) = Bigger (subst x n e1) (subst x n e2)
 subst x n e = e 
 
 step :: Expr -> Expr
@@ -57,6 +58,10 @@ step (App (Lam x t b) e2)   | isValue e2 = subst x e2 b
 step (App e1 e2) = App (step e1) e2
 step (Let v e1 e2) | isValue e1 = subst v e1 e2
                    | otherwise = Let v (step e1) e2
+
+step (Bigger (Num n1) (Num n2)) = if n1 > n2 then BTrue else BFalse
+step (Bigger (Num n) e2) = Bigger (Num n) (step e2)
+step (Bigger e1 e2) = Bigger (step e1) e2
                    
 step e = error (show e)
 

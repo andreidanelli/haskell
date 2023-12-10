@@ -54,6 +54,11 @@ typeof ctx (Let v e1 e2) = case typeof ctx e1 of
                              Just t1 -> typeof ((v, t1):ctx) e2 
                              _       -> Nothing 
 
+typeof ctx (Bigger e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+                              (Just TNum, Just TNum)  -> Just TNum
+                              _                       -> Nothing
+
+
 typecheck :: Expr -> Expr
 typecheck e = case typeof [] e of
                 Just _ -> e
