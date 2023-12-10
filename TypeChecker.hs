@@ -58,6 +58,13 @@ typeof ctx (Bigger e1 e2) = case (typeof ctx e1, typeof ctx e2) of
                               (Just TNum, Just TNum)  -> Just TNum
                               _                       -> Nothing
 
+typeof ctx (Smaller e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+                              (Just TNum, Just TNum)  -> Just TNum
+                              _                       -> Nothing
+
+typeof ctx (BiggerEquals e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+                              (Just TNum, Just TNum)  -> Just TNum
+                              _                       -> Nothing
 
 typecheck :: Expr -> Expr
 typecheck e = case typeof [] e of

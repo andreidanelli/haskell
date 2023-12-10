@@ -67,6 +67,10 @@ step (Bigger e1 e2) = Bigger (step e1) e2
 step (Smaller (Num n1) (Num n2)) = if n1 < n2 then BTrue else BFalse
 step (Smaller (Num n) e2) = Smaller (Num n) (step e2)
 step (Smaller e1 e2) = Smaller (step e1) e2
+
+step (BiggerEquals (Num n1) (Num n2)) = if n1 >= n2 then BTrue else BFalse
+step (BiggerEquals (Num n) e2) = BiggerEquals (Num n) (step e2)
+step (BiggerEquals e1 e2) = BiggerEquals (step e1) e2
                    
 step e = error (show e)
 
