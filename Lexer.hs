@@ -18,7 +18,9 @@ data Expr =  BTrue
            | Let String Expr Expr 
            | Bigger Expr Expr
            | Smaller Expr Expr
-           | BiggerEquals Expr Expr
+           | GreaterEquals Expr Expr
+           | LeastEqual Expr Expr
+           | Equals Expr Expr
        deriving Show
 
 data Ty = TBool
@@ -50,7 +52,9 @@ data Token = TokenTrue
            | TokenNumber
            | TokenBigger
            | TokenSmaller
-           | TokenBiggerEquals
+           | TokenGreaterEquals
+           | TokenLeastEqual
+           | TokenEquals
         deriving (Show, Eq)
 
 isSymb :: Char -> Bool
@@ -82,7 +86,9 @@ lexSymbol cs = case span isSymb cs of
                 (":", rest)  -> TokenColon : lexer rest 
                 (">", rest)  -> TokenBigger : lexer rest
                 ("<", rest)  -> TokenSmaller : lexer rest
-                (">=", rest) -> TokenBiggerEquals : lexer rest
+                (">=", rest) -> TokenGreaterEquals : lexer rest
+                ("<=", rest) -> TokenLeastEqual : lexer rest
+                ("==", rest) -> TokenEquals : lexer rest
                 _-> error "Lexial error: Invalid Symbol!"
 
 lexKW :: String -> [Token]

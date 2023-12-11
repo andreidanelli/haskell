@@ -34,7 +34,10 @@ import Lexer
     ':'         { TokenColon }
     '>'         { TokenBigger }
     '<'         { TokenSmaller }
-    ">="        { TokenBiggerEquals }
+    ">="        { TokenGreaterEquals }
+    "<="        { TokenLeastEqual }
+    "=="        { TokenEquals }
+
 %%
 
 Exp                 : num                           { Num $1 }
@@ -53,7 +56,9 @@ Exp                 : num                           { Num $1 }
                     | let var '=' Exp in Exp        { Let $2 $4 $6 }
                     | Exp '>' Exp                   { Bigger $1 $3 }
                     | Exp '<' Exp                   { Smaller $1 $3 }
-                    | Exp ">=" Exp                  { BiggerEquals $1 $3}
+                    | Exp ">=" Exp                  { GreaterEquals $1 $3 }
+                    | Exp "<=" Exp                  { LeastEqual $1 $3 }
+                    | Exp "==" Exp                  { Equals $1 $3 }
 
 Type    : Bool                                      { TBool }
         | Num                                       { TNum }

@@ -44,12 +44,14 @@ typeof ctx (Lam v t1 b) = let ctx' = (v, t1):ctx
                             in case typeof ctx' b of 
                                  Just t2 -> Just (TFun t1 t2)
                                  _       -> Nothing
+                                 
 typeof ctx (App e1 e2) = case (typeof ctx e1, typeof ctx e2) of 
                            (Just (TFun t11 t12), Just t2) -> if (t11 == t2) then 
                                                                Just t12
                                                              else 
                                                                Nothing 
                            _  -> Nothing
+
 typeof ctx (Let v e1 e2) = case typeof ctx e1 of 
                              Just t1 -> typeof ((v, t1):ctx) e2 
                              _       -> Nothing 
@@ -62,7 +64,15 @@ typeof ctx (Smaller e1 e2) = case (typeof ctx e1, typeof ctx e2) of
                               (Just TNum, Just TNum)  -> Just TNum
                               _                       -> Nothing
 
-typeof ctx (BiggerEquals e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+typeof ctx (GreaterEquals e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+                              (Just TNum, Just TNum)  -> Just TNum
+                              _                       -> Nothing
+
+typeof ctx (LeastEqual e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+                              (Just TNum, Just TNum)  -> Just TNum
+                              _                       -> Nothing
+
+typeof ctx (Equals e1 e2) = case (typeof ctx e1, typeof ctx e2) of
                               (Just TNum, Just TNum)  -> Just TNum
                               _                       -> Nothing
 

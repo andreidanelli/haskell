@@ -68,10 +68,18 @@ step (Smaller (Num n1) (Num n2)) = if n1 < n2 then BTrue else BFalse
 step (Smaller (Num n) e2) = Smaller (Num n) (step e2)
 step (Smaller e1 e2) = Smaller (step e1) e2
 
-step (BiggerEquals (Num n1) (Num n2)) = if n1 >= n2 then BTrue else BFalse
-step (BiggerEquals (Num n) e2) = BiggerEquals (Num n) (step e2)
-step (BiggerEquals e1 e2) = BiggerEquals (step e1) e2
-                   
+step (GreaterEquals (Num n1) (Num n2)) = if n1 >= n2 then BTrue else BFalse
+step (GreaterEquals (Num n) e2) = GreaterEquals (Num n) (step e2)
+step (GreaterEquals e1 e2) = GreaterEquals (step e1) e2
+
+step (LeastEqual (Num n1) (Num n2)) = if n1 <= n2 then BTrue else BFalse
+step (LeastEqual (Num n) e2) = LeastEqual (Num n) (step e2)
+step (LeastEqual e1 e2) = LeastEqual (step e1) e2
+
+step (Equals (Num n1) (Num n2)) = if n1 == n2 then BTrue else BFalse
+step (Equals (Num n) e2) = Equals (Num n) (step e2)
+step (Equals e1 e2) = Equals (step e1) e2
+
 step e = error (show e)
 
 eval :: Expr -> Expr
