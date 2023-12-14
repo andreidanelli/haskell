@@ -80,6 +80,10 @@ step (Equals (Num n1) (Num n2)) = if n1 == n2 then BTrue else BFalse
 step (Equals (Num n) e2) = Equals (Num n) (step e2)
 step (Equals e1 e2) = Equals (step e1) e2
 
+step (Different (Num n1) (Num n2)) = if n1 /= n2 then BTrue else BFalse
+step (Different (Num n) e2) = Different (Num n) (step e2)
+step (Different e1 e2) = Different (step e1) e2
+
 step e = error (show e)
 
 eval :: Expr -> Expr

@@ -37,6 +37,7 @@ import Lexer
     ">="        { TokenGreaterEquals }
     "<="        { TokenLeastEqual }
     "=="        { TokenEquals }
+    "!="        { TokenDifferent }
 
 %%
 
@@ -59,6 +60,7 @@ Exp                 : num                           { Num $1 }
                     | Exp ">=" Exp                  { GreaterEquals $1 $3 }
                     | Exp "<=" Exp                  { LeastEqual $1 $3 }
                     | Exp "==" Exp                  { Equals $1 $3 }
+                    | Exp "!=" Exp                  { Different $1 $3 }
 
 Type    : Bool                                      { TBool }
         | Num                                       { TNum }
