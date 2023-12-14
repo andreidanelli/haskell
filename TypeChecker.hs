@@ -80,6 +80,9 @@ typeof ctx (Different e1 e2) = case (typeof ctx e1, typeof ctx e2) of
                               (Just TNum, Just TNum)  -> Just TNum
                               _                       -> Nothing
 
+typeof ctx (Not e1) = case (typeof ctx e1) of
+                              (Just TBool) -> Just TBool
+                              _            -> Nothing  
 
 typecheck :: Expr -> Expr
 typecheck e = case typeof [] e of
