@@ -15,14 +15,16 @@ subst x n (Var v) = if (x == v) then
                       n 
                     else 
                       (Var v)
-subst x n (Lam v t b) = Lam v t (subst x n b)
-subst x n (App e1 e2) = App (subst x n e1) (subst x n e2)
-subst x n (Add e1 e2) = Add (subst x n e1) (subst x n e2)
-subst x n (And e1 e2) = And (subst x n e1) (subst x n e2)
-subst x n (If e1 e2 e3) = If (subst x n e1) (subst x n e2) (subst x n e3)
-subst x n (Paren e) = Paren (subst x n e)
-subst x n (Let v e1 e2) = Let v (subst x n e1) (subst x n e2)
-subst x n (Bigger e1 e2) = Bigger (subst x n e1) (subst x n e2)
+subst x n (Lam v t b)     = Lam v t (subst x n b)
+subst x n (App e1 e2)     = App (subst x n e1) (subst x n e2)
+subst x n (Add e1 e2)     = Add (subst x n e1) (subst x n e2)
+subst x n (And e1 e2)     = And (subst x n e1) (subst x n e2)
+subst x n (If e1 e2 e3)   = If (subst x n e1) (subst x n e2) (subst x n e3)
+subst x n (Paren e)       = Paren (subst x n e)
+subst x n (Let v e1 e2)   = Let v (subst x n e1) (subst x n e2)
+subst x n (Sub e1 e2)     = Sub (subst x n e1) (subst x n e2)
+subst x n (Mul e1 e2)     = Mul (subst x n e1) (subst x n e2)
+subst x n (Bigger e1 e2)  = Bigger (subst x n e1) (subst x n e2)
 subst x n (Smaller e1 e2) = Smaller (subst x n e1) (subst x n e2)
 subst x n e = e 
 
@@ -87,6 +89,13 @@ step (Different e1 e2) = Different (step e1) e2
 step(Not BTrue) = BFalse
 step(Not BFalse) = BTrue
 step(Not e1) = Not (step e1)
+
+-- Exibe o total de números após a execução do laço
+step (For (Var v) (Num start) (Num end) body)
+          | start > end = Num 0
+          | otherwise   = Add (step innerFor) (subst v (Num start) body)
+        where
+          innerFor = For (Var v) (Num (start + 1)) (Num end) body
 
 step e = error (show e)
 
