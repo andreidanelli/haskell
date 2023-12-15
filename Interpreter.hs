@@ -24,9 +24,13 @@ subst x n (Paren e)       = Paren (subst x n e)
 subst x n (Let v e1 e2)   = Let v (subst x n e1) (subst x n e2)
 subst x n (Sub e1 e2)     = Sub (subst x n e1) (subst x n e2)
 subst x n (Mul e1 e2)     = Mul (subst x n e1) (subst x n e2)
+subst x n (Div e1 e2)     = Div (subst x n e1) (subst x n e2)
 subst x n (Bigger e1 e2)  = Bigger (subst x n e1) (subst x n e2)
 subst x n (Smaller e1 e2) = Smaller (subst x n e1) (subst x n e2)
 subst x n e = e 
+
+funDiv :: Int -> Int -> Int
+funDiv x y = x `div` y
 
 step :: Expr -> Expr
 step (Add (Num n1) (Num n2)) = Num (n1 + n2)
@@ -40,6 +44,10 @@ step (Sub e1 e2) = Sub (step e1) e2
 step (Mul (Num n1) (Num n2)) = Num (n1 * n2)
 step (Mul (Num n) e) = Mul (Num n) (step e)
 step (Mul e1 e2) = Mul (step e1) e2
+
+step (Div (Num n1) (Num n2)) = Num (funDiv n1 n2)
+step (Div (Num n) e) = Div (Num n) (step e)
+step (Div e1 e2) = Div (step e1) e2
 
 step (And BFalse _) = BFalse
 step (And BTrue e) = e

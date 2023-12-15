@@ -27,7 +27,11 @@ typeof ctx (Sub e1 e2) = case (typeof ctx e1, typeof ctx e2) of
 
 typeof ctx (Mul e1 e2) = case (typeof ctx e1, typeof ctx e2) of
                         (Just TNum, Just TNum) -> Just TNum
-                        _                      -> Nothing                        
+                        _                      -> Nothing    
+
+typeof ctx (Div e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+                        (Just TNum, Just TNum) -> Just TNum
+                        _                      -> Nothing                     
 
 typeof ctx (If e1 e2 e3) = case typeof ctx e1 of 
                          Just TBool -> case (typeof ctx e2, typeof ctx e3) of
