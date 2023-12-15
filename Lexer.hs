@@ -25,6 +25,7 @@ data Expr =  BTrue
            | Different Expr Expr
            | Not Expr
            | For Expr Expr Expr Expr
+           | While Expr Expr
        deriving Show
 
 data Ty = TBool
@@ -65,6 +66,7 @@ data Token = TokenTrue
            | TokenFor
            | TokenTo
            | TokenDo
+           | TokenWhile
         deriving (Show, Eq)
 
 isSymb :: Char -> Bool
@@ -118,4 +120,5 @@ lexKW cs = case span isAlpha cs of
              ("for", rest) -> TokenFor : lexer rest
              ("to", rest) -> TokenTo : lexer rest
              ("do", rest) -> TokenDo : lexer rest
+             ("while", rest) -> TokenWhile : lexer rest
              (var, rest) -> TokenVar var : lexer rest 

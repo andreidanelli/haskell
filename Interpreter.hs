@@ -27,6 +27,7 @@ subst x n (Mul e1 e2)     = Mul (subst x n e1) (subst x n e2)
 subst x n (Div e1 e2)     = Div (subst x n e1) (subst x n e2)
 subst x n (Bigger e1 e2)  = Bigger (subst x n e1) (subst x n e2)
 subst x n (Smaller e1 e2) = Smaller (subst x n e1) (subst x n e2)
+subst x n (While cont e2) = While (subst x n cont) (subst x n e2)
 subst x n e = e 
 
 funDiv :: Int -> Int -> Int
@@ -104,6 +105,10 @@ step (For (Var v) (Num start) (Num end) body)
           | otherwise   = Add (step innerFor) (subst v (Num start) body)
         where
           innerFor = For (Var v) (Num (start + 1)) (Num end) body
+
+step (While (Num 0) _) = Num 0
+step (While (Num n) e2) = step (For (Var "i") (Num 1) (Num n) e2)
+step (While e1 e2) = While (step e1) e2
 
 step e = error (show e)
 

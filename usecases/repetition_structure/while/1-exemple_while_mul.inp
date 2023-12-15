@@ -1,0 +1,1 @@
+while (3) do (if true && false then 1*3 else 1*2)
