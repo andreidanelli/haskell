@@ -28,6 +28,7 @@ subst x n (Div e1 e2)     = Div (subst x n e1) (subst x n e2)
 subst x n (Bigger e1 e2)  = Bigger (subst x n e1) (subst x n e2)
 subst x n (Smaller e1 e2) = Smaller (subst x n e1) (subst x n e2)
 subst x n (While cont e2) = While (subst x n cont) (subst x n e2)
+subst x n (List ls) = List (map (subst x n) ls)
 subst x n e = e 
 
 funDiv :: Int -> Int -> Int
@@ -110,8 +111,15 @@ step (While (Num 0) _) = Num 0
 step (While (Num n) e2) = step (For (Var "i") (Num 1) (Num n) e2)
 step (While e1 e2) = While (step e1) e2
 
+step (First (List (e:_))) = e
+step (First e) = First (step e)
+
+step (Second (List (_:se))) = List se
+step (Second e) = Second (step e)
+
 step e = error (show e)
 
 eval :: Expr -> Expr
+eval (List ls) = List (map eval ls)
 eval e | isValue e = e
        | otherwise = eval (step e)

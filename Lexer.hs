@@ -26,11 +26,15 @@ data Expr =  BTrue
            | Not Expr
            | For Expr Expr Expr Expr
            | While Expr Expr
+           | List [Expr]
+           | First Expr
+           | Second Expr
        deriving Show
 
 data Ty = TBool
           | TNum
           | TFun Ty Ty
+          | TList Ty
        deriving (Show, Eq)
 
 data Token = TokenTrue
@@ -67,6 +71,12 @@ data Token = TokenTrue
            | TokenTo
            | TokenDo
            | TokenWhile
+           | TokenList
+           | TokenFirst
+           | TokenSecond
+           | TokenComma
+           | TokenLeft
+           | TokenRight
         deriving (Show, Eq)
 
 isSymb :: Char -> Bool
@@ -76,6 +86,9 @@ lexer :: String -> [Token]
 lexer [] = []
 lexer ('(':cs) = TokenLParen : lexer cs
 lexer (')':cs) = TokenRParen : lexer cs
+lexer (',':cs) = TokenComma  : lexer cs
+lexer ('[':cs) = TokenLeft   : lexer cs
+lexer (']':cs) = TokenRight  : lexer cs
 lexer (c:cs) | isSpace c = lexer cs     
              | isDigit c = lexNum (c:cs)  
              | isSymb  c = lexSymbol (c:cs)  
@@ -121,4 +134,7 @@ lexKW cs = case span isAlpha cs of
              ("to", rest) -> TokenTo : lexer rest
              ("do", rest) -> TokenDo : lexer rest
              ("while", rest) -> TokenWhile : lexer rest
+             ("list", rest) -> TokenList : lexer rest
+             ("first", rest) -> TokenFirst : lexer rest
+             ("second", rest) -> TokenSecond : lexer rest
              (var, rest) -> TokenVar var : lexer rest 

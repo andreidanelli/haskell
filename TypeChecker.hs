@@ -96,6 +96,21 @@ typeof ctx (While e1 e2) = case (typeof ctx e1) of
                              Just t1  -> Just t1
                              _        -> Nothing 
 
+typeof ctx (List []) = Nothing  -- Lista vazia
+typeof ctx (List (e:es)) = case typeof ctx e of
+                            Just elementType -> if all ((== Just elementType) . typeof ctx) es
+                                                then Just (TList elementType)
+                                                else Nothing
+                            _                -> Nothing
+
+typeof ctx (First e) = case typeof ctx e of
+                          Just (TList t) -> Just t
+                          _              -> Nothing
+
+typeof ctx (Second e) = case typeof ctx e of
+                          Just (TList t) -> Just t
+                          _              -> Nothing
+
 typecheck :: Expr -> Expr
 typecheck e = case typeof [] e of
                 Just _ -> e

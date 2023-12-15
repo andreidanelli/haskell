@@ -44,6 +44,12 @@ import Lexer
     to          { TokenTo }
     do          { TokenDo }
     while       { TokenWhile }
+    List        { TokenList }
+    first       { TokenFirst }
+    second      { TokenSecond }
+    ','         { TokenComma }
+    '['         { TokenLeft }
+    ']'         { TokenRight }
 
 %%
 
@@ -71,10 +77,19 @@ Exp                 : num                                   { Num $1 }
                     | "!" Exp                               { Not $2 }
                     | for Exp '=' Exp to Exp do Exp         { For $2 $4 $6 $8 }
                     | while '('Exp')' do '('Exp')'          { While $3 $7 }
+                    | '['ModelList']'                       { List $2 }
+                    | first Exp                             { First $2 }
+                    | second Exp                            { Second $2 }
 
-Type    : Bool                                      { TBool }
-        | Num                                       { TNum }
-        | '(' Type "->" Type ')'                    { TFun $2 $4 }
+ModelList   : Exp                                           { [$1] }
+            | Exp ',' ModelList                             { $1 : $3 }
+
+
+Type    : Bool                                              { TBool }
+        | Num                                               { TNum }
+        | '(' Type "->" Type ')'                            { TFun $2 $4 }
+        | List '[' Type ']'                                 { TList $3 }
+
 
 {
 
